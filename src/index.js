@@ -1,5 +1,7 @@
 /* @flow */
 
+import config from './config';
+import dep_api from './deployments/rest';
 import express from 'express';
 import bodyParser from 'body-parser';
 import multer from 'multer';
@@ -13,16 +15,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.listen(3080, () => {
-    console.log('Server is listening');
-});
+app.use(config.api.contextPath, dep_api);
 
-app.get('/hello', (req, res) => {
-    res.send('world');
-});
-
-app.get('/add/:x/:y', (req, res) => {
-    const x = req.params.x * 1;
-    const y = req.params.y * 1;
-    res.send({sum: x+y});
+app.listen(config.api.port, () => {
+    console.log(`Server is listening on port ${config.api.port}`);
 });
